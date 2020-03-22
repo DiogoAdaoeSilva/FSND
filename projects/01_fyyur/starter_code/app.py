@@ -42,6 +42,9 @@ class Venue(db.Model):
     phone = db.Column(db.String(120), nullable=False)
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
+    seeking_talent = db.Column(db.Boolean, default=True)
+    seeking_description = db.Column(db.Text)
+    genres =db.Column(db.PickleType)
     shows = db.relationship('Show', backref='venue', lazy=True)
 
     def __repr__(self):
@@ -109,12 +112,12 @@ def index():
 @app.route('/venues')
 def venues():
   data = []
-  areas = Venue.query.distinct('city', 'state').all()
+  areas = Venue.query.distinct('city','state').all()
   for area in areas:
     venues = Venue.query.filter(Venue.city == area.city, Venue.state == area.state).all()
     venues_by_area = []
     for v in venues:
-      venues_by_area.append({'id': v.id, 'name': v.name, 'num_upcoming_shows': v.num_upcoming_shows})
+      venues_by_area.append({'id': v.id, 'name': v.name})
     record = {
       'city': area.city,
       'state': area.state,
@@ -232,6 +235,18 @@ def create_venue_form():
 
 @app.route('/venues/create', methods=['POST'])
 def create_venue_submission():
+  name = request.form.get('name')
+  city = request.form.get('city')
+  state = request.form.get('state')
+  address = request.form.get('address')
+  phone = request.form.get('phone')
+  genres = request.form.get('genres')
+  facebook_link = request.form.get('facebook_link')
+
+  venue = Venue(name=name, city=city, state=state, address=address, phone=phone, genres=genres, facebook_link=facebook_link)
+  db.session.add(venue)
+  db.session.commit()
+
   # TODO: insert form data as a new Venue record in the db, instead
   # TODO: modify data to be the data object returned from db insertion
 
