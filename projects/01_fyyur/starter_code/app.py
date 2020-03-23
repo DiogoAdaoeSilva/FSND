@@ -1,4 +1,4 @@
-#----------------------------------------------------------------------------#
+  #----------------------------------------------------------------------------#
 # Imports
 #----------------------------------------------------------------------------#
 
@@ -124,7 +124,7 @@ def venues():
       'venues': venues_by_area
     }
     data.append(record)
-    return render_template('pages/venues.html', areas=data);
+  return render_template('pages/venues.html', areas=data);
 
 @app.route('/venues/search', methods=['POST'])
 def search_venues():
