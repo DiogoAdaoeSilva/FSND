@@ -45,8 +45,9 @@ class Venue(db.Model):
     facebook_link = db.Column(db.String(120))
     seeking_talent = db.Column(db.Boolean, default=True)
     seeking_description = db.Column(db.Text)
-    genres =db.Column(db.PickleType)
+    genres = db.Column(db.PickleType)
     shows = db.relationship('Show', backref='venue', lazy=True)
+
 
     def __repr__(self):
       return f'<Venue ID: {self.id}, city: {self.city}, name: {self.name}>'
@@ -62,7 +63,7 @@ class Artist(db.Model):
     city = db.Column(db.String(120), nullable=False)
     state = db.Column(db.String(120), nullable=False)
     phone = db.Column(db.String(120), nullable=False)
-    genres = db.Column(db.String(120), nullable=False)
+    genres = db.Column(db.String(120))
     image_link = db.Column(db.String(500))
     facebook_link = db.Column(db.String(120))
     shows = db.relationship('Show', backref='artist', lazy=True)
@@ -79,7 +80,7 @@ class Show(db.Model):
   start_time = db.Column(db.String(120))
 
   def __repr__(self):
-    return f'<Show {self.id} {self.venue_id} {artist_id}>'
+    return f'<Show {self.id} {self.venue_id} {self.artist_id}>'
  
 
 
