@@ -14,6 +14,7 @@ from flask_wtf import Form
 from forms import *
 from flask_migrate import Migrate
 import sys
+from datetime import datetime
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -77,12 +78,19 @@ class Show(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   venue_id = db.Column(db.Integer, db.ForeignKey('venue.id'))
   artist_id = db.Column(db.Integer, db.ForeignKey('artist.id'))
-  start_time = db.Column(db.String(120))
+  start_time = db.Column(db.DateTime)
 
   def __repr__(self):
     return f'<Show {self.id} {self.venue_id} {self.artist_id}>'
  
 
+#----------------------------------------------------------------------------#
+# My helper functions
+#----------------------------------------------------------------------------#
+
+
+def count_upcoming_shows(id):
+  return Show.query.filter_by(venue_id=id).filter(Show.start_time >  datetime.now()).count()
 
 
 #----------------------------------------------------------------------------#
@@ -95,7 +103,7 @@ def format_datetime(value, format='medium'):
       format="EEEE MMMM, d, y 'at' h:mma"
   elif format == 'medium':
       format="EE MM, dd, y h:mma"
-  return babel.dates.format_datetime(date, format)
+  return babel.dates.format_datetime(date, format, locale='en')
 
 app.jinja_env.filters['datetime'] = format_datetime
 
@@ -108,8 +116,9 @@ def index():
   return render_template('pages/home.html')
 
 
-#  Venues - DONE
+#  Venues - In Progress
 #  ----------------------------------------------------------------
+
 
 @app.route('/venues')
 def venues():
@@ -119,7 +128,7 @@ def venues():
     venues = Venue.query.filter(Venue.city == area.city, Venue.state == area.state).all()
     venues_by_area = []
     for v in venues:
-      venues_by_area.append({'id': v.id, 'name': v.name})
+      venues_by_area.append({'id': v.id, 'name': v.name, 'num_upcoming_shows': count_upcoming_shows(v.id)})
     record = {
       'city': area.city,
       'state': area.state,
@@ -227,7 +236,7 @@ def show_venue(venue_id):
   data = list(filter(lambda d: d['id'] == venue_id, [data1, data2, data3]))[0]
   return render_template('pages/show_venue.html', venue=data)
 
-#  Create Venue - IN PROGRESS
+#  Create Venue - DONE
 #  ----------------------------------------------------------------
 
 @app.route('/venues/create', methods=['GET'])
