@@ -5,7 +5,7 @@
 import json
 import dateutil.parser
 import babel
-from flask import Flask, render_template, request, Response, flash, redirect, url_for
+from flask import Flask, render_template, request, Response, flash, redirect, url_for, jsonify
 from flask_moment import Moment
 from flask_sqlalchemy import SQLAlchemy
 import logging
@@ -237,54 +237,67 @@ def create_venue_submission():
 
 	return render_template('pages/home.html')
 
-  # TODO: insert form data as a new Venue record in the db, instead - DONE
-  # TODO: modify data to be the data object returned from db insertion - DONE
+  # TODO: insert form data as a new Venue record in the db, instead - [DONE]
+  # TODO: modify data to be the data object returned from db insertion - [DONE]
 
   # on successful db insert, flash success
   
-  # TODO: on unsuccessful db insert, flash an error instead. - DONE
+  # TODO: on unsuccessful db insert, flash an error instead. - [DONE]
   # e.g., flash('An error occurred. Venue ' + data.name + ' could not be listed.')
   # see: http://flask.pocoo.org/docs/1.0/patterns/flashing/
   	
 
 @app.route('/venues/<venue_id>', methods=['DELETE'])
 def delete_venue(venue_id):
-  # TODO: Complete this endpoint for taking a venue_id, and using
+  # TODO: Complete this endpoint for taking a venue_id, and using [DONE]
   # SQLAlchemy ORM to delete a record. Handle cases where the session commit could fail.
+  error= False
+  try:
+    Show.query.filter_by(venue_id=venue_id).delete()
+    Venue.query.filter_by(id=venue_id).delete()
+    db.session.commit()
+  except:
+    error = True
+    db.session.rollback()
+    print(sys.exc_info())
+  finally:
+    db.session.close()
+  if not error:
+    flash('Venue was deleted!', 'info')
+  else:
+    flash('An error occurred. Venue could not be deleted.', 'error')
 
-  # BONUS CHALLENGE: Implement a button to delete a Venue on a Venue Page, have it so that
+  # BONUS CHALLENGE: Implement a button to delete a Venue on a Venue Page, have it so that [DONE]
   # clicking that button delete it from the db then redirect the user to the homepage
-  return None
+  return jsonify({ 'success': True })
 
 #  Artists
 #  ----------------------------------------------------------------
 @app.route('/artists')
 def artists():
-  # TODO: replace with real data returned from querying the database
-  data=[{
-    "id": 4,
-    "name": "Guns N Petals",
-  }, {
-    "id": 5,
-    "name": "Matt Quevedo",
-  }, {
-    "id": 6,
-    "name": "The Wild Sax Band",
-  }]
+  # TODO: replace with real data returned from querying the database [DONE]
+  
+  artists = Artist.query.all()
+  data = []
+  for artist in artists:
+    data.append({"id": artist.id, "name": artist.name})
+
   return render_template('pages/artists.html', artists=data)
 
 @app.route('/artists/search', methods=['POST'])
 def search_artists():
-  # TODO: implement search on artists with partial string search. Ensure it is case-insensitive.
+  # TODO: implement search on artists with partial string search. Ensure it is case-insensitive. [DONE]
   # seach for "A" should return "Guns N Petals", "Matt Quevado", and "The Wild Sax Band".
   # search for "band" should return "The Wild Sax Band".
+  search_term = request.form.get('search_term')
+  artists = Artist.query.filter(Artist.name.ilike('%' + search_term + '%')).all()
+  artists_count = Artist.query.filter(Artist.name.ilike('%' + search_term + '%')).count()
+  data = []
+  for a in artists:
+    data.append({"id": a.id, "name": a.name, "num_upcoming_shows": upcoming_shows(a.id)})
   response={
-    "count": 1,
-    "data": [{
-      "id": 4,
-      "name": "Guns N Petals",
-      "num_upcoming_shows": 0,
-    }]
+    "count": artists_count ,
+    "data": data
   }
   return render_template('pages/search_artists.html', results=response, search_term=request.form.get('search_term', ''))
 
