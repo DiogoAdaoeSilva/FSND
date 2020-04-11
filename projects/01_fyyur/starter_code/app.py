@@ -463,7 +463,7 @@ def shows():
   data = []
   for show in shows:
     data.append({
-      "venue_id": show.artist.id, 
+      "venue_id": show.venue.id, 
       "venue_name": show.venue.name, 
       "artist_id": show.artist.id,
       "artist_name": show.artist.name,
