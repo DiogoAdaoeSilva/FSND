@@ -71,6 +71,31 @@
 		{% endfor %}
 	</div>
 </section>
+<section>
+    <button class="btn btn-primary" id='edit_btn'
+       data-id="{{ artist.id }}">Edit artist
+ </button>
+</section>
+
+
+{% block javascript %}
+<script>
+	// uses fetch to open the form with the artist data prefilled and ready to edit
+		const editBtn = document.getElementById('edit_btn');
+		editBtn.onclick = function(e){
+			console.log(e);
+			const artistID = e.target.dataset['id'];
+			fetch('/artists/' + artistID + '/edit', {
+				method: "GET"
+			})
+		.then(function() {
+		window.location.href = '/artists/' + artistID + '/edit';
+	})
+		.catch(function(e) {
+		console.log('error', e)
+	})
+		}
+	</script>
 
 {% endblock %}
-
+{% endblock %}
