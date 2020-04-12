@@ -212,7 +212,7 @@ def show_venue(venue_id):
   }
   return render_template('pages/show_venue.html', venue=data)
 
-#  Create Venue - DONE
+#  Create Venue - [DONE]
 #  ----------------------------------------------------------------
 
 @app.route('/venues/create', methods=['GET'])
@@ -340,7 +340,7 @@ def show_artist(artist_id):
 
   return render_template('pages/show_artist.html', artist=data)
 
-#  Update [IN PROGRESS]
+#  Update [DONE]
 #  ----------------------------------------------------------------
 @app.route('/artists/<int:artist_id>/edit', methods=['GET'])
 def edit_artist(artist_id):
