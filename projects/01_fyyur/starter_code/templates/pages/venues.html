@@ -9,8 +9,11 @@
 			<a href="/venues/{{ venue.id }}">
 				<i class="fas fa-music"></i>
 				<div class="item">
-					<h5>{{ venue.name }}</h5>
+					<h5>{{ venue.name }}</h5> 
+					<h6 class="subtitle">{% if venue.num_upcoming_shows!=0 %} Shows scheduled!{% endif %}</h6>
+
 				</div>
+
 			</a>
 		</li>
 		{% endfor %}

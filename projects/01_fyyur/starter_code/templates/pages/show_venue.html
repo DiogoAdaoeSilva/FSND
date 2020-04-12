@@ -74,6 +74,49 @@
 		{% endfor %}
 	</div>
 </section>
+<section>
+    <button class="btn btn-danger" id='delete_btn'
+       data-id="{{ venue.id }}">Delete Venue
+ </button>
+ <button class="btn btn-primary" id='edit_btn'
+       data-id="{{ venue.id }}">Edit Venue
+ </button>
+ </section>
+{% block javascript %}
+<script>
+		const btn = document.getElementById('delete_btn');
+		btn.onclick = function(e){
+			console.log(e);
+			var result = confirm('Are you sure you want to delete the venue?');
+			if (result) {
+			const venueID = e.target.dataset['id'];
+			fetch('/venues/' + venueID, {
+				method: "DELETE"
+			})
+		.then(function() {
+		window.location.href = '/';
+	})
+		.catch(function(e) {
+		console.log('error', e)
+	})
+		}}
+		const edit_btn = document.getElementById('edit_btn');
+		edit_btn.onclick = function(e){
+			const venueId = e.target.dataset['id'];
+			fetch ('/venues/' + venueId + '/edit', {
+				method: "GET"
+				})
+			.then(function() {
+				window.location.href = '/venues/' + venueId + '/edit';
+				})
+			.catch(function(e){
+			console.log('error', e)
+			})
+			}
+	</script>
 
 {% endblock %}
+{% endblock %}
+
+
 
