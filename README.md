@@ -1,7 +1,6 @@
-# Forked Repo of Udacity's Full Stack Developer Nano Degree
+# Udacity's Full Stack Developer Nano Degree
 
-The projects folder contains the project work to be completed in the degree.
-
+I am enrolled in Udacity's Full Stack Developer Nano Degree. Throghout the course I will list here the projets that I have completed and a summary of learnings of each project
 
 # Projects
 
