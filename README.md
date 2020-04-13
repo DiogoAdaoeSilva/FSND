@@ -4,9 +4,9 @@ I am enrolled in Udacity's Full Stack Developer Nano Degree. Throghout the cours
 
 This is a forked repo. All the projects can be found in the project's folder.
 
-# Projects
+## Projects
 
-## 01_fyyur [Passed review]
+### 01_fyyur [Passed review]
 The goal of the project was to complete the Fyyur app, with the help of Udacity's starter code: adding the missing models, controllers and completing views.
 
 Fyyur is a CRUD app where the user can list venues, artists and shows. The user can create a new venue, artist or show, view the existing venues, artists and shows, update them and delete them.
