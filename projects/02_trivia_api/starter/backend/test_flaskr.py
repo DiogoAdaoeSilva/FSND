@@ -39,7 +39,7 @@ class TriviaTestCase(unittest.TestCase):
         pass
 
     """
-    [IN PROGRESS]
+    [DONE]
     TODO
     Write at least one test for each test for successful operation and for expected errors.
     """
