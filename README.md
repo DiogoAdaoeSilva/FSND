@@ -2,7 +2,7 @@
 
 I am enrolled in Udacity's Full Stack Developer Nano Degree. Throughout the course I will list here the projets that I have completed and a summary of learnings of each project.
 
-This is a forked repo. All the projects can be found in the project's folder.
+This is a forked repo. All the projects can be found in the `projects` folder.
 
 ## Projects
 
