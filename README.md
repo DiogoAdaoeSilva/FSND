@@ -2,11 +2,11 @@
 
 I am enrolled in Udacity's Full Stack Developer Nano Degree. Throughout the course I will list here the projets that I have completed and a summary of learnings of each project.
 
-This is a forked repo. All the projects can be found in the `projects` folder.
+This is a forked repo. All the projects can be found in the [projects](https://github.com/DiogoAdaoeSilva/FSND/tree/master/projects) folder.
 
 ## Projects
 
-### 01_fyyur [Passed review]
+### [01_fyyur](https://github.com/DiogoAdaoeSilva/FSND/tree/master/projects/01_fyyur/starter_code) [Passed review]
 The goal of the project was to complete the Fyyur app, with the help of Udacity's starter code: adding the missing models, controllers and completing views.
 
 Fyyur is a CRUD app where the user can list venues, artists and shows. The user can create a new venue, artist or show, view the existing venues, artists and shows, update them and delete them.
@@ -24,7 +24,7 @@ The app is built with Python, Flask, SQLAlchemy and has a PostgreSQL DB.
 - How to flash messages to improve user feedback
 
 
-### 02_trivia_api [In review]
+### [02_trivia_api](https://github.com/DiogoAdaoeSilva/FSND/tree/master/projects/02_trivia_api/starter) [In review]
 The goal of this project was to implement enpoints, write unit tests and documentation in order to complete the Trivia app. 
 Udacity provided a started code that included the frontend and the database models. 
 
