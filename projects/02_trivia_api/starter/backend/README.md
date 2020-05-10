@@ -72,9 +72,12 @@ This README is missing documentation of your endpoints. Below is an example for 
 
 Endpoints
 GET '/categories'
-GET ...
-POST ...
-DELETE ...
+GET '/questions'
+DELETE '/questions/<int:question_id>'
+POST '/questions'
+POST '/questions/search'
+GET '/categories/<int:category_id>/questions'
+POST '/quizzes'
 
 GET '/categories'
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
@@ -86,6 +89,182 @@ GET '/categories'
 '4' : "History",
 '5' : "Entertainment",
 '6' : "Sports"}
+
+
+GET '/questions?page=1'
+- Fetches a list of 10 questions, with 10 being the number of questions in one page. Each questions is a dictionary with the keys "answer", "category", "difficulty", "id" and "question"
+- Fetches a list of all existing categories
+- Fetches the count of total questions
+- Fetches id of current category, with category being a query string that can be passed in the request
+- Request Arguments: query string 'page' and 'category' 
+- Returns: An object with 5 keys: categories, current_category, questions, success, total_questions
+{
+  "categories": [
+    "Science", 
+    "Art", 
+    "Geography", 
+    "History", 
+    "Entertainment", 
+    "Sports"
+  ], 
+  "current_category": null, 
+  "questions": [
+    {
+      "answer": "One", 
+      "category": 2, 
+      "difficulty": 4, 
+      "id": 18, 
+      "question": "How many paintings did Van Gogh sell in his lifetime?"
+    }, 
+    {
+      "answer": "Jackson Pollock", 
+      "category": 2, 
+      "difficulty": 2, 
+      "id": 19, 
+      "question": "Which American artist was a pioneer of Abstract Expressionism, and a leading exponent of action painting?"
+    }, 
+    {
+      "answer": "The Liver", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 20, 
+      "question": "What is the heaviest organ in the human body?"
+    }, 
+    {
+      "answer": "Alexander Fleming", 
+      "category": 1, 
+      "difficulty": 3, 
+      "id": 21, 
+      "question": "Who discovered penicillin?"
+    }, 
+    {
+      "answer": "Blood", 
+      "category": 1, 
+      "difficulty": 4, 
+      "id": 22, 
+      "question": "Hematology is a branch of medicine involving the study of what?"
+    }, 
+    {
+      "answer": "Diogo", 
+      "category": 1, 
+      "difficulty": 1, 
+      "id": 24, 
+      "question": "what is my name?"
+    }, 
+    {
+      "answer": null, 
+      "category": null, 
+      "difficulty": null, 
+      "id": 25, 
+      "question": null
+    }, 
+    {
+      "answer": null, 
+      "category": null, 
+      "difficulty": null, 
+      "id": 26, 
+      "question": null
+    }, 
+    {
+      "answer": "Fe", 
+      "category": 1, 
+      "difficulty": 3, 
+      "id": 27, 
+      "question": "What is the element for iron"
+    }, 
+    {
+      "answer": "Ronaldo", 
+      "category": 6, 
+      "difficulty": 1, 
+      "id": 30, 
+      "question": "Who is the best footbal player of all time?"
+    }
+  ], 
+  "success": true, 
+  "total_questions": 25
+}
+
+
+DELETE '/questions/<int:question_id>'
+- Fetches the questions with id passed in the request
+- Request arguments: question id
+- Returns id of deleted question and success key. If id passed does not exist returns and error
+
+
+POST '/questions'
+- Request arguments: An object with keys question, answer, difficulty, category.
+{question: "asfasd", answer: "asdf", difficulty: 1, category: 1}
+- Returns an object with keys, answer, category, created (representing the question id), difficulty, question.
+{
+  "answer": "asdf", 
+  "category": 1, 
+  "created": 36, 
+  "difficulty": 1, 
+  "question": "asfasd", 
+  "success": true
+}
+
+POST '/questions/search'
+- Fetches all questions for which the question field matches fully or partially a search term. Matching is not case sensitive
+- Request arguments: An object with key 'searchTerm' and value string with text to search
+{searchTerm: "my question"}
+- Returns an object with current category, list of questions where the value of the field 'question' matches the search term, total questions that have a match with the search term
+{
+  "current_category": null, 
+  "questions": [], 
+  "success": true, 
+  "total_questions": 0
+}
+
+GET '/categories/<int:category_id>/questions'
+- Fetches questions that belong to category id
+- Request arguments: category id
+- Returns an object with keys, currentCategory, questions and total_questions in this category
+{
+  "currentCategory": 6, 
+  "questions": [
+    {
+      "answer": "Brazil", 
+      "category": 6, 
+      "difficulty": 3, 
+      "id": 10, 
+      "question": "Which is the only team to play in every soccer World Cup tournament?"
+    }, 
+    {
+      "answer": "Uruguay", 
+      "category": 6, 
+      "difficulty": 4, 
+      "id": 11, 
+      "question": "Which country won the first ever soccer World Cup in 1930?"
+    }, 
+    {
+      "answer": "Ronaldo", 
+      "category": 6, 
+      "difficulty": 1, 
+      "id": 30, 
+      "question": "Who is the best footbal player of all time?"
+    }
+  ], 
+  "sucess": true, 
+  "total_questions": 3
+}
+
+
+POST '/quizzes'
+- Fetches questions from all or a particular category
+- Request arguments: list of previous questions shown to the user and the quiz category
+{previous_questions: [], quiz_category: {type: "Science", id: "1"}}
+- Returns an object with the keys question and as value a dictionary with the key answer, category, difficulty, id and question
+{
+  "question": {
+    "answer": "The Liver", 
+    "category": 1, 
+    "difficulty": 4, 
+    "id": 20, 
+    "question": "What is the heaviest organ in the human body?"
+  }, 
+  "success": true
+}
 
 ```
 
