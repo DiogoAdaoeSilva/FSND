@@ -1,5 +1,5 @@
 import json
-from flask import request, _request_ctx_stack
+from flask import request, _request_ctx_stack, abort
 from functools import wraps
 from jose import jwt
 from urllib.request import urlopen
@@ -33,7 +33,7 @@ class AuthError(Exception):
 '''
 def get_token_auth_header():
     '''All errors in this method raise a 401 'Unauthorized' error code '''
-    auth = request.header.get('Authorization', None)
+    auth = request.headers.get('Authorization', None)
     if not auth:
         raise AuthError({
             'code': 'authorization_header_missing',
@@ -41,6 +41,8 @@ def get_token_auth_header():
             }, 401)
     
     header_parts = auth.split()
+    print('>>> header_parts:', header_parts ) #debugging
+    print('>>> len(header_parts):', len(header_parts)) # debugging
 
     if header_parts[0].lower() != 'bearer':
         raise AuthError({
@@ -50,7 +52,7 @@ def get_token_auth_header():
 
     elif len(header_parts) == 1:
         raise AuthError({
-            'code': 'authorization_header_invalid'
+            'code': 'authorization_header_invalid',
             'description': 'Missing token.'
             }, 401)
 
@@ -87,9 +89,11 @@ def check_permissions(permission, payload):
             'description': 'Permissions not included in JWT'
             }, 400) # Bad request error code
 
-    elif permission not in payload['permissions']:
+    print(">>> payload['permissions']:", payload['permissions'] )
+
+    if permission not in payload['permissions']:
         raise AuthError({
-            'code': 'Permission not found'
+            'code': 'Permission not found',
             'description': 'User does not have permission to do requested change'
             }, 403) # Forbidden error code
     return True
@@ -112,9 +116,12 @@ def verify_decode_jwt(token):
     '''Credit to Udacity's classes where it is shown how to verify and decode tokens
     Used the same structure as shown in the Udacity's classes'''
     jsonurl =urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json') #open url where keys are found
+    print('>>> jsonurl:',jsonurl) # debugging
     jwks = json.loads(jsonurl.read()) # load keys found in above url
+    print('>>> jwks:', jwks) #debugging
     
     unverified_header = jwt.get_unverified_header(token) # returns the JWT's header without doing any kind of validation
+    print('>>> unverified_header', unverified_header)
 
     rsa_key = {}
     if 'kid' not in unverified_header: # The "kid" (key ID) Header Parameter is a hint indicating which key was used to secure the JWS.
@@ -132,15 +139,19 @@ def verify_decode_jwt(token):
             'n': key['n'],
             'e': key['e']
             }
+    print('>>> rsa_key:', rsa_key)
     if rsa_key:
+        print('>>> passed if rsa_key')
         # decode the payload
         try:
-            payload.jwt.decode(
+            payload = jwt.decode(
                 token,
                 rsa_key,
                 algorithms = ALGORITHMS,
                 audience = API_AUDIENCE,
                 issuer = 'https://' + AUTH0_DOMAIN + '/')
+
+            print('>>> payload:', payload)
 
             return payload
 
@@ -149,6 +160,7 @@ def verify_decode_jwt(token):
                 'code': 'token_expired',
                 'description': 'Token is expired'
                 }, 401)
+
         except jwt.JWTClaimsError:
             raise AuthError({
                 'code': 'invalid_claims',
@@ -185,12 +197,16 @@ def requires_auth(permission=''):
     def requires_auth_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
+            print('>>> running requires_auth') #debugging
             token = get_token_auth_header()
             try:
+                print('>>> running_verify_jwt')
                 payload = verify_decode_jwt(token)
             except:
                 abort(401)
             
+            print('>>> running check_permissions')
+            print('>>> permission:', permission)
             check_permissions(permission, payload)
             return f(payload, *args, **kwargs) # return the payload to the decorated function
 
