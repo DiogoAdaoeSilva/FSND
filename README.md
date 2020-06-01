@@ -24,7 +24,7 @@ The app is built with Python, Flask, SQLAlchemy and has a PostgreSQL DB.
 - How to flash messages to improve user feedback
 
 
-### [02_trivia_api](https://github.com/DiogoAdaoeSilva/FSND/tree/master/projects/02_trivia_api/starter) [In review]
+### [02_trivia_api](https://github.com/DiogoAdaoeSilva/FSND/tree/master/projects/02_trivia_api/starter) [Passed review]
 The goal of this project was to implement enpoints, write unit tests and documentation in order to complete the Trivia app. 
 Udacity provided a started code that included the frontend and the database models. 
 
@@ -43,5 +43,25 @@ The app runs on a Flask server, with as PostgresSQL DB. The frontend has NodeJs 
 - Cross-Origin Resource Sharing with the Flask **CORS extension**
 - Writing unit tests
 - API reference and writing endpoint documentation
+
+### [03_coffee_shop_full_stack](https://github.com/DiogoAdaoeSilva/FSND/tree/master/projects/03_coffee_shop_full_stack/starter_code) [In review]
+The goal of this project was to practice Identity and Access Management.
+
+The Coffee Shop application is used to manage drinks. It is possible to create a new drink, view a list of existing drinks, delete and update a drink. 
+
+Udacity provided a starter code that included the DB model and the frontend. My task was to setup a third-party authenticator, AUTH0, by configuring the application, api, users, roles and permissions in AUTH0.
+
+Then I implemented the API endpoints and the authorization decorator that checks if a user is correctly authenticated and has the right permissions to perfom the requested action.
+
+The app runs on a Flask server, with a sqlite DB. The frontend is built with Ionic framework
+
+#### Learning Highlights:
+- Setting up AUTH0 for an API
+- Understanding the structure of a JWT
+- Validating the authorization header: Bearer Token
+- Validating a JWT 
+- Checking user permissions
+- Using a POSTMAN collection to test the API and authentication
+
 
 
