@@ -146,7 +146,7 @@ def patch_drink(self, id):
 
         return jsonify({
           'success': True,
-          'drinks': long_drink
+          'drinks': [long_drink]
           })
 
     except:

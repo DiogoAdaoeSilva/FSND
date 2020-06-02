@@ -38,11 +38,11 @@ def get_token_auth_header():
         raise AuthError({
             'code': 'authorization_header_missing',
             'description': 'Authorization_header_is_expected.' 
-            }, 401)
+            }, 401) # pass the error and status_code to the AuthError class
     
     header_parts = auth.split()
-    print('>>> header_parts:', header_parts ) #debugging
-    print('>>> len(header_parts):', len(header_parts)) # debugging
+    #print('>>> header_parts:', header_parts ) #debugging
+    #print('>>> len(header_parts):', len(header_parts)) # debugging
 
     if header_parts[0].lower() != 'bearer':
         raise AuthError({
@@ -89,7 +89,7 @@ def check_permissions(permission, payload):
             'description': 'Permissions not included in JWT'
             }, 400) # Bad request error code
 
-    print(">>> payload['permissions']:", payload['permissions'] )
+    #print(">>> payload['permissions']:", payload['permissions'] )
 
     if permission not in payload['permissions']:
         raise AuthError({
@@ -118,10 +118,10 @@ def verify_decode_jwt(token):
     jsonurl =urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json') #open url where keys are found
     print('>>> jsonurl:',jsonurl) # debugging
     jwks = json.loads(jsonurl.read()) # load keys found in above url
-    print('>>> jwks:', jwks) #debugging
+    #print('>>> jwks:', jwks) #debugging
     
     unverified_header = jwt.get_unverified_header(token) # returns the JWT's header without doing any kind of validation
-    print('>>> unverified_header', unverified_header)
+    #print('>>> unverified_header', unverified_header)
 
     rsa_key = {}
     if 'kid' not in unverified_header: # The "kid" (key ID) Header Parameter is a hint indicating which key was used to secure the JWS.
@@ -139,7 +139,7 @@ def verify_decode_jwt(token):
             'n': key['n'],
             'e': key['e']
             }
-    print('>>> rsa_key:', rsa_key)
+    #print('>>> rsa_key:', rsa_key)
     if rsa_key:
         print('>>> passed if rsa_key')
         # decode the payload
@@ -151,7 +151,7 @@ def verify_decode_jwt(token):
                 audience = API_AUDIENCE,
                 issuer = 'https://' + AUTH0_DOMAIN + '/')
 
-            print('>>> payload:', payload)
+            #print('>>> payload:', payload)
 
             return payload
 
@@ -197,16 +197,16 @@ def requires_auth(permission=''):
     def requires_auth_decorator(f):
         @wraps(f)
         def wrapper(*args, **kwargs):
-            print('>>> running requires_auth') #debugging
+            #print('>>> running requires_auth') #debugging
             token = get_token_auth_header()
             try:
-                print('>>> running_verify_jwt')
+                #print('>>> running_verify_jwt')
                 payload = verify_decode_jwt(token)
             except:
                 abort(401)
             
-            print('>>> running check_permissions')
-            print('>>> permission:', permission)
+            #print('>>> running check_permissions')
+            #print('>>> permission:', permission)
             check_permissions(permission, payload)
             return f(payload, *args, **kwargs) # return the payload to the decorated function
 
